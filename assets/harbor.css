@@ -302,3 +302,5 @@ text-align:center}
 .hb-card-action{gap:6px}.hb-chip{padding:5px 6px}.hb-panel h2{padding-bottom:10px}}
 @media(prefers-reduced-motion:reduce){.hb-card{transition:none}.hb-card:hover{transform:none}}
 .hb-table thead th:nth-child(3),.hb-table td.hb-app-rating{text-align:center}
+.hb-table caption{text-align:left;caption-side:top;padding:0 0 14px;line-height:1.7;font-weight:550}
+.hb-panel:has(.hb-table)>.hb-date{line-height:1.7;margin-bottom:6px}
