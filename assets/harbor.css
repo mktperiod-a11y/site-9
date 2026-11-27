@@ -306,3 +306,4 @@ text-align:center}
 .hb-panel:has(.hb-table)>.hb-date{line-height:1.7;margin-bottom:6px}
 .hb-table th:nth-child(2),.hb-table td:nth-child(2),
 .hb-table th:nth-child(4),.hb-table td:nth-child(4){text-align:center}
+summary{color:var(--muted)}details[open] summary{color:var(--ink)}
