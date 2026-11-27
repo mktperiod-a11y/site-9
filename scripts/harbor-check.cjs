@@ -27,6 +27,7 @@ if(data.scoringMode==='app'){
  assert.equal((home.match(/class="hb-fill hb-bar-/g)||[]).length,10,'차트 막대 누락');
  assert(home.includes('앱 공개 지표 기준')&&home.includes('검색 관심도는 미반영'));
  assert(!home.includes('공개 지표는 미수집 상태'));
+ assert(!/href="https:\/\/play\.google\.com/.test(home),'스토어 직접 링크 노출');
 }
 const {parsePage}=require('./harbor-collect.cjs');
 const sample='<script type="application/ld+json">'+
@@ -52,6 +53,7 @@ for(const f of walk('_site')){
  assert(!/<meta[^>]+name=["'](?:author|generator)/i.test(s));
  for(const p of patterns)assert(!s.includes(p),`개인정보 ${f}`);
  if(f.endsWith('.html')){
+  assert(!/href="https:\/\/play\.google\.com/.test(s),'스토어 직접 링크 노출');
   assert(s.includes('Content-Security-Policy'));assert(s.includes('no-referrer'));
   for(const x of data.webhards)assert(!s.includes(x.url),`외부 주소 노출 ${f}`);
   for(const m of s.matchAll(/href="([^"]+)"[^>]*>사이트 바로가기/g))assert(/\/go\/[^/]+\//.test(m[1]));

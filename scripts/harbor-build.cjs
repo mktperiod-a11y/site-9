@@ -16,8 +16,7 @@ const hasMetrics=rows.some(x=>x.score!=null);
 const basis=appMode?'앱 공개 지표 기준':'인기 · 사용성 · 애정';
 const metricNote=appMode?'다운로드·평점·평가 수를 반영합니다. 네이버 검색 관심도는 미반영입니다.':
  hasMetrics?'공개 지표를 종합한 비교 지수입니다.':'공개 지표를 확보하면 지수를 표시합니다.';
-const source=x=>x.metricsSource?`<a class="hb-source" href="${esc(x.metricsSource.url)}"
- target="_blank" rel="noopener noreferrer">Google Play ↗</a><span class="hb-date"> · ${esc(x.metricsSource.collectedAt)}</span>`:'–';
+const source=x=>x.metricsSource?`Google Play · ${esc(x.metricsSource.collectedAt)}`:'–';
 const benefits=x=>x.benefits.length?x.benefits.map(b=>`<span class="hb-chip">${esc(b.text)}</span>`).join(' '):
  '<span class="hb-date">공식 사이트에서 확인하세요.</span>';
 const move=x=>{const old=data.previousRanks[x.id];return old==null?'NEW':old===x.rank?'–':
@@ -83,7 +82,7 @@ const comparison=`<section class="hb-panel"><h2>한눈에 비교하기</h2>
 <p class="hb-date">출처: Google Play · 수집 ${data.metricsDate||'미수집'}<br>다운로드는 공개 구간의 하한값입니다. –는 미확인입니다.</p>
 <table class="hb-table"><caption class="hb-date">앱 평점·평가 수는 한국 지역 영문 페이지 기준입니다. 지역·기기에 따라 다를 수 있습니다.</caption>
 <thead><tr>${['서비스','가입 혜택','앱 평점','평가 수','다운로드',appMode?'앱 지수':'지수'].map(x=>`<th scope="col">${x}</th>`).join('')}</tr></thead>
-<tbody>${rows.map(x=>`<tr><th scope="row"><a href="${href('webhard/'+x.id+'/')}">${x.name}</a><div>${source(x)}</div></th>
+<tbody>${rows.map(x=>`<tr><th scope="row"><a href="${href('webhard/'+x.id+'/')}">${x.name}</a></th>
 <td>${esc(x.benefits.find(b=>b.kind==='join')?.text||'–')}</td><td>${rating(x.metrics.rating)}</td>
 <td>${fmt(x.metrics.ratingCount)}</td><td>${downloads(x.metrics.downloads)}</td><td>${x.score==null?'–':x.score.toFixed(1)}</td></tr>`).join('')}</tbody></table></section>`;
 fs.appendFileSync(out+'/assets/harbor.css','\n'+rows.filter(x=>x.score!=null).map(x=>`.hb-bar-${x.id}{width:${x.score}%}`).join('\n'));
