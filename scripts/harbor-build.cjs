@@ -61,7 +61,7 @@ function page(p,title,body,items=[],extra=[]){
 <link rel="apple-touch-icon" href="${href('assets/harbor-icon-192.png')}">
 <link rel="stylesheet" href="${href('assets/harbor.css')}?v=${styleVersion}">
 ${scripts.map(s=>`<script type="application/ld+json">${s}</script>`).join('\n')}</head><body>
-<header><div class="hb-wrap hb-head"><a class="hb-brand" href="${href('')}"><b>◈</b> ${brand}</a>
+<header><div class="hb-wrap hb-head"><a class="hb-brand" href="${href('')}"><img src="${href('assets/harbor-icon.svg')}" width="30" height="30" alt=""> ${brand}</a>
 <nav aria-label="주 메뉴"><a href="${href('')}">순위</a><a href="${href('picks.html')}">조건별 추천</a>
 <a href="${href('criteria.html')}">선정 기준</a></nav></div></header>
 <main class="hb-wrap">${body}</main><footer><div class="hb-wrap">${brand} · P2P사이트·웹하드 비교 안내
@@ -72,18 +72,20 @@ ${scripts.map(s=>`<script type="application/ld+json">${s}</script>`).join('\n')}
  write(p||'index.html',html);
 }
 const hero=(t,sub)=>`<section class="hb-hero"><span class="hb-eyebrow">WEBHARD GUIDE</span><h1>${t}</h1>
-<p class="hb-sub">${sub}</p><span class="hb-date">정보 확인 ${data.updated} · 공개 ${rows.length}곳</span></section>`;
+<p class="hb-sub">${sub}</p><span class="hb-update">업데이트 ${data.updated} <span>· ${rows.length}곳 비교</span></span></section>`;
 const card=x=>`<article class="hb-card"><div class="hb-number">${x.rank}<span class="hb-move">${move(x)}</span></div>
 <a href="${href('webhard/'+x.id+'/')}"><img class="hb-logo" src="${href(x.logo)}" alt="${esc(x.name)} 로고" width="96" height="42"></a>
 <div><a class="hb-name" href="${href('webhard/'+x.id+'/')}">${esc(x.name)}</a>
 <p class="hb-reason">${esc(x.reason)}</p><div>${benefits(x)}</div></div>
-<div><div class="hb-date">★ ${x.stars.toFixed(1)} <small>편집 별점</small></div>${go(x)}</div></article>`;
+<div class="hb-card-action"><div class="hb-rating" aria-label="편집 별점 ${x.stars.toFixed(1)}점">
+<span class="hb-rating-star" aria-hidden="true">★</span><strong>${x.stars.toFixed(1)}</strong>
+<small>편집 별점</small></div>${go(x)}</div></article>`;
 const comparison=`<section class="hb-panel"><h2>한눈에 비교하기</h2>
 <p class="hb-date">출처: Google Play · 수집 ${data.metricsDate||'미수집'}<br>다운로드는 공개 구간의 하한값입니다. –는 미확인입니다.</p>
 <table class="hb-table"><caption class="hb-date">앱 평점·평가 수는 한국 지역 영문 페이지 기준입니다. 지역·기기에 따라 다를 수 있습니다.</caption>
 <thead><tr>${['서비스','가입 혜택','앱 평점','평가 수','다운로드',appMode?'앱 지수':'지수'].map(x=>`<th scope="col">${x}</th>`).join('')}</tr></thead>
 <tbody>${rows.map(x=>`<tr><th scope="row"><a href="${href('webhard/'+x.id+'/')}">${x.name}</a></th>
-<td>${esc(x.benefits.find(b=>b.kind==='join')?.text||'–')}</td><td>${rating(x.metrics.rating)}</td>
+<td>${esc(x.benefits.find(b=>b.kind==='join')?.text||'–')}</td><td class="hb-app-rating"><span aria-hidden="true">★</span> ${rating(x.metrics.rating)}</td>
 <td>${fmt(x.metrics.ratingCount)}</td><td>${downloads(x.metrics.downloads)}</td><td>${x.score==null?'–':x.score.toFixed(1)}</td></tr>`).join('')}</tbody></table></section>`;
 fs.appendFileSync(out+'/assets/harbor.css','\n'+rows.filter(x=>x.score!=null).map(x=>`.hb-bar-${x.id}{width:${x.score}%}`).join('\n'));
 const chart=`<section class="hb-panel"><h2>종합 지수 비교</h2><p class="hb-date">${basis} · 100점 기준</p>
