@@ -1,0 +1,34 @@
+name: Harbor integrity
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+        env:
+          SITE_URL: http://localhost:4173
+      - run: npm test
+        env:
+          PRIVACY_PATTERNS: ${{ secrets.PRIVACY_PATTERNS }}
+      - run: |
+          python3 -m http.server 4173 --directory _site &
+          npm run check:screen
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: harbor-screen-checks
+          path: checks/
