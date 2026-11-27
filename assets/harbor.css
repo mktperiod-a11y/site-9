@@ -301,3 +301,4 @@ font-size:9px;
 text-align:center}
 .hb-card-action{gap:6px}.hb-chip{padding:5px 6px}.hb-panel h2{padding-bottom:10px}}
 @media(prefers-reduced-motion:reduce){.hb-card{transition:none}.hb-card:hover{transform:none}}
+.hb-table thead th:nth-child(3),.hb-table td.hb-app-rating{text-align:center}
