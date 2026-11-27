@@ -304,3 +304,5 @@ text-align:center}
 .hb-table thead th:nth-child(3),.hb-table td.hb-app-rating{text-align:center}
 .hb-table caption{text-align:left;caption-side:top;padding:0 0 14px;line-height:1.7;font-weight:550}
 .hb-panel:has(.hb-table)>.hb-date{line-height:1.7;margin-bottom:6px}
+.hb-table th:nth-child(2),.hb-table td:nth-child(2),
+.hb-table th:nth-child(4),.hb-table td:nth-child(4){text-align:center}
