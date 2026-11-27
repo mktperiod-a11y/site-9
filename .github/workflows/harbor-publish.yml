@@ -5,6 +5,7 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+  actions: read
   pages: write
   id-token: write
 concurrency:
@@ -47,5 +48,34 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
+          name: harbor-pages-${{ github.run_id }}-${{ github.run_attempt }}
+      - name: Wait for artifact metadata
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_API: ${{ github.api_url }}
+          GH_REPOSITORY: ${{ github.repository }}
+          GH_RUN_ID: ${{ github.run_id }}
+          GH_ARTIFACT: harbor-pages-${{ github.run_id }}-${{ github.run_attempt }}
+        run: |
+          node <<'NODE'
+          const {setTimeout:wait}=require('node:timers/promises');
+          (async()=>{
+            const e=process.env;
+            const url=`${e.GH_API}/repos/${e.GH_REPOSITORY}/actions/runs/${e.GH_RUN_ID}/artifacts`+
+              `?name=${encodeURIComponent(e.GH_ARTIFACT)}`;
+            for(let attempt=0;attempt<30;attempt++){
+              const r=await fetch(url,{headers:{Authorization:`Bearer ${e.GH_TOKEN}`}});
+              if(!r.ok)throw new Error(`배포 파일 조회 실패: ${r.status}`);
+              const body=await r.json();
+              const artifacts=body.artifacts.filter(a=>a.name===e.GH_ARTIFACT&&!a.expired);
+              if(artifacts.length===1){console.log('배포 파일 준비 완료');return;}
+              if(artifacts.length>1)throw new Error('배포 파일 이름 중복');
+              await wait(3000);
+            }
+            throw new Error('배포 파일 등록 확인 시간 초과');
+          })().catch(e=>{console.error(e.message);process.exit(1)});
+          NODE
       - uses: actions/deploy-pages@v4
         id: release
+        with:
+          artifact_name: harbor-pages-${{ github.run_id }}-${{ github.run_attempt }}
