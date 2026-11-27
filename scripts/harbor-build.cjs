@@ -6,6 +6,8 @@ const brand='혜택나침반';const out='_site';fs.rmSync(out,{recursive:true,fo
 fs.cpSync('assets',out+'/assets',{recursive:true});
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const href=p=>base+'/'+p;
+const styleVersion=crypto.createHash('sha256').update(fs.readFileSync('assets/harbor.css'))
+ .update(JSON.stringify(data)).digest('hex').slice(0,12);
 const fmt=x=>x==null?'–':Number(x).toLocaleString('ko-KR');
 const rating=x=>x==null?'–':Number(x).toFixed(1);
 const downloads=x=>x==null?'–':fmt(x)+'+';
@@ -58,7 +60,7 @@ function page(p,title,body,items=[],extra=[]){
 <link rel="icon" href="${href('assets/harbor-icon.svg')}" type="image/svg+xml">
 <link rel="icon" href="${href('assets/harbor-icon.ico')}">
 <link rel="apple-touch-icon" href="${href('assets/harbor-icon-192.png')}">
-<link rel="stylesheet" href="${href('assets/harbor.css')}">
+<link rel="stylesheet" href="${href('assets/harbor.css')}?v=${styleVersion}">
 ${scripts.map(s=>`<script type="application/ld+json">${s}</script>`).join('\n')}</head><body>
 <header><div class="hb-wrap hb-head"><a class="hb-brand" href="${href('')}"><b>◈</b> ${brand}</a>
 <nav aria-label="주 메뉴"><a href="${href('')}">순위</a><a href="${href('picks.html')}">조건별 추천</a>
