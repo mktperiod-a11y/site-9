@@ -13,6 +13,28 @@ for(const x of data.webhards){
  assert(x.benefits.filter(b=>b.kind==='event').length<=2);
  for(const b of x.benefits){assert(b.text.length<=22);assert(!/(지급|진행 중|~시)$/.test(b.text));}
 }
+if(data.scoringMode==='app'){
+ assert.equal(data.weights.pop,0,'검색 지표를 임의로 반영하지 않음');
+ assert.equal(data.weights.use+data.weights.love,100);
+ for(const x of rows){
+  assert(x.score>0&&x.score<=100,'앱 지수 누락');
+  assert(x.metrics.downloads>0&&x.metrics.rating>=1&&x.metrics.rating<=5&&x.metrics.ratingCount>0);
+  assert(x.metricsSource?.url.startsWith('https://play.google.com/store/apps/details?'));
+  assert(x.metricsSource.url.includes('id='+x.metrics.playApp));
+  assert(x.metricsSource.collectedAt&&x.metricsSource.downloadsType==='lower-bound');
+ }
+ const home=fs.readFileSync('_site/index.html','utf8');
+ assert.equal((home.match(/class="hb-fill hb-bar-/g)||[]).length,10,'차트 막대 누락');
+ assert(home.includes('앱 공개 지표 기준')&&home.includes('검색 관심도는 미반영'));
+ assert(!home.includes('공개 지표는 미수집 상태'));
+}
+const {parsePage}=require('./harbor-collect.cjs');
+const sample='<script type="application/ld+json">'+
+ JSON.stringify({aggregateRating:{ratingValue:'4.264705657958984',ratingCount:'215'}})+'</script>'+
+ '<div class="ClM7O">50K+</div><div class="g1rdde">Downloads</div>';
+assert.deepEqual(parsePage(sample),{downloads:50000,rating:4.3,ratingCount:215});
+assert.throws(()=>parsePage('<html>Service Unavailable</html>'));
+assert.throws(()=>parsePage(sample.replace('4.264705657958984','8')));
 for(const x of rows){if(x.score!=null){
  assert(Math.abs(Object.values(x.parts).reduce((a,b)=>a+b,0)-x.score)<1e-8);
  for(const k of ['pop','use','love'])assert(x.parts[k]>=0&&x.parts[k]<=data.weights[k]);

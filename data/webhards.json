@@ -1,19 +1,30 @@
 {
   "updated": "2026-11-27",
-  "metricsDate": null,
+  "metricsDate": "2026-11-27",
   "rankLimit": 10,
   "minScore": 3.5,
   "weights": {
-    "pop": 40,
-    "use": 40,
-    "love": 20
+    "pop": 0,
+    "use": 70,
+    "love": 30
   },
   "weeklyAdjust": {
     "items": 0,
     "max": 0
   },
   "maxRank": {},
-  "previousRanks": {},
+  "previousRanks": {
+    "ondisk": 1,
+    "kdisk": 2,
+    "filejo": 3,
+    "yesfile": 4,
+    "filesun": 5,
+    "filecookie": 6,
+    "filenori": 7,
+    "wedisk": 8,
+    "filebogo": 9,
+    "filestar": 10
+  },
   "webhards": [
     {
       "id": "ondisk",
@@ -33,14 +44,21 @@
         }
       ],
       "metrics": {
-        "playApp": null,
-        "downloads": null,
-        "rating": null,
-        "ratingCount": null,
+        "playApp": "com.ondisk.mobile4v18M",
+        "downloads": 500000,
+        "rating": 4.8,
+        "ratingCount": 15413,
         "search": null,
         "searchChange": null
       },
-      "verifiedDate": "2026-11-27"
+      "verifiedDate": "2026-11-27",
+      "metricsSource": {
+        "url": "https://play.google.com/store/apps/details?id=com.ondisk.mobile4v18M&hl=en&gl=KR",
+        "collectedAt": "2026-11-27",
+        "locale": "en-KR",
+        "downloadsType": "lower-bound",
+        "ratingType": "aggregateRating"
+      }
     },
     {
       "id": "kdisk",
@@ -60,14 +78,21 @@
         }
       ],
       "metrics": {
-        "playApp": null,
-        "downloads": null,
-        "rating": null,
-        "ratingCount": null,
+        "playApp": "com.kdisk.mobileapp5",
+        "downloads": 50000,
+        "rating": 4.8,
+        "ratingCount": 609,
         "search": null,
         "searchChange": null
       },
-      "verifiedDate": "2026-11-27"
+      "verifiedDate": "2026-11-27",
+      "metricsSource": {
+        "url": "https://play.google.com/store/apps/details?id=com.kdisk.mobileapp5&hl=en&gl=KR",
+        "collectedAt": "2026-11-27",
+        "locale": "en-KR",
+        "downloadsType": "lower-bound",
+        "ratingType": "aggregateRating"
+      }
     },
     {
       "id": "filejo",
@@ -82,14 +107,21 @@
       ],
       "benefits": [],
       "metrics": {
-        "playApp": null,
-        "downloads": null,
-        "rating": null,
-        "ratingCount": null,
+        "playApp": "kr.co.icoxs.mobile.filejo",
+        "downloads": 100000,
+        "rating": 3.5,
+        "ratingCount": 442,
         "search": null,
         "searchChange": null
       },
-      "verifiedDate": "2026-11-27"
+      "verifiedDate": "2026-11-27",
+      "metricsSource": {
+        "url": "https://play.google.com/store/apps/details?id=kr.co.icoxs.mobile.filejo&hl=en&gl=KR",
+        "collectedAt": "2026-11-27",
+        "locale": "en-KR",
+        "downloadsType": "lower-bound",
+        "ratingType": "aggregateRating"
+      }
     },
     {
       "id": "yesfile",
@@ -104,14 +136,21 @@
       ],
       "benefits": [],
       "metrics": {
-        "playApp": null,
-        "downloads": null,
-        "rating": null,
-        "ratingCount": null,
+        "playApp": "com.mnt.aos.yesfile.shortcuts",
+        "downloads": 500000,
+        "rating": 3.9,
+        "ratingCount": 1613,
         "search": null,
         "searchChange": null
       },
-      "verifiedDate": "2026-11-27"
+      "verifiedDate": "2026-11-27",
+      "metricsSource": {
+        "url": "https://play.google.com/store/apps/details?id=com.mnt.aos.yesfile.shortcuts&hl=en&gl=KR",
+        "collectedAt": "2026-11-27",
+        "locale": "en-KR",
+        "downloadsType": "lower-bound",
+        "ratingType": "aggregateRating"
+      }
     },
     {
       "id": "filesun",
@@ -126,14 +165,21 @@
       ],
       "benefits": [],
       "metrics": {
-        "playApp": null,
-        "downloads": null,
-        "rating": null,
-        "ratingCount": null,
+        "playApp": "com.is.filesun.version4",
+        "downloads": 500000,
+        "rating": 4.7,
+        "ratingCount": 15131,
         "search": null,
         "searchChange": null
       },
-      "verifiedDate": "2026-11-27"
+      "verifiedDate": "2026-11-27",
+      "metricsSource": {
+        "url": "https://play.google.com/store/apps/details?id=com.is.filesun.version4&hl=en&gl=KR",
+        "collectedAt": "2026-11-27",
+        "locale": "en-KR",
+        "downloadsType": "lower-bound",
+        "ratingType": "aggregateRating"
+      }
     },
     {
       "id": "filecookie",
@@ -148,14 +194,21 @@
       ],
       "benefits": [],
       "metrics": {
-        "playApp": null,
-        "downloads": null,
-        "rating": null,
-        "ratingCount": null,
+        "playApp": "com.filekukiv6",
+        "downloads": 50000,
+        "rating": 4.6,
+        "ratingCount": 1196,
         "search": null,
         "searchChange": null
       },
-      "verifiedDate": "2026-11-27"
+      "verifiedDate": "2026-11-27",
+      "metricsSource": {
+        "url": "https://play.google.com/store/apps/details?id=com.filekukiv6&hl=en&gl=KR",
+        "collectedAt": "2026-11-27",
+        "locale": "en-KR",
+        "downloadsType": "lower-bound",
+        "ratingType": "aggregateRating"
+      }
     },
     {
       "id": "filenori",
@@ -170,14 +223,21 @@
       ],
       "benefits": [],
       "metrics": {
-        "playApp": null,
-        "downloads": null,
-        "rating": null,
-        "ratingCount": null,
+        "playApp": "com.FNoriShopGo",
+        "downloads": 50000,
+        "rating": 4.3,
+        "ratingCount": 215,
         "search": null,
         "searchChange": null
       },
-      "verifiedDate": "2026-11-27"
+      "verifiedDate": "2026-11-27",
+      "metricsSource": {
+        "url": "https://play.google.com/store/apps/details?id=com.FNoriShopGo&hl=en&gl=KR",
+        "collectedAt": "2026-11-27",
+        "locale": "en-KR",
+        "downloadsType": "lower-bound",
+        "ratingType": "aggregateRating"
+      }
     },
     {
       "id": "wedisk",
@@ -192,14 +252,21 @@
       ],
       "benefits": [],
       "metrics": {
-        "playApp": null,
-        "downloads": null,
-        "rating": null,
-        "ratingCount": null,
+        "playApp": "com.WeGoGoGoGo",
+        "downloads": 100000,
+        "rating": 3.5,
+        "ratingCount": 265,
         "search": null,
         "searchChange": null
       },
-      "verifiedDate": "2026-11-27"
+      "verifiedDate": "2026-11-27",
+      "metricsSource": {
+        "url": "https://play.google.com/store/apps/details?id=com.WeGoGoGoGo&hl=en&gl=KR",
+        "collectedAt": "2026-11-27",
+        "locale": "en-KR",
+        "downloadsType": "lower-bound",
+        "ratingType": "aggregateRating"
+      }
     },
     {
       "id": "filebogo",
@@ -214,14 +281,21 @@
       ],
       "benefits": [],
       "metrics": {
-        "playApp": null,
-        "downloads": null,
-        "rating": null,
-        "ratingCount": null,
+        "playApp": "com.winpeople.filebogo",
+        "downloads": 100000,
+        "rating": 3.5,
+        "ratingCount": 4035,
         "search": null,
         "searchChange": null
       },
-      "verifiedDate": "2026-11-27"
+      "verifiedDate": "2026-11-27",
+      "metricsSource": {
+        "url": "https://play.google.com/store/apps/details?id=com.winpeople.filebogo&hl=en&gl=KR",
+        "collectedAt": "2026-11-27",
+        "locale": "en-KR",
+        "downloadsType": "lower-bound",
+        "ratingType": "aggregateRating"
+      }
     },
     {
       "id": "filestar",
@@ -236,14 +310,22 @@
       ],
       "benefits": [],
       "metrics": {
-        "playApp": null,
-        "downloads": null,
-        "rating": null,
-        "ratingCount": null,
+        "playApp": "com.me.filestar2",
+        "downloads": 10000,
+        "rating": 3.8,
+        "ratingCount": 23,
         "search": null,
         "searchChange": null
       },
-      "verifiedDate": "2026-11-27"
+      "verifiedDate": "2026-11-27",
+      "metricsSource": {
+        "url": "https://play.google.com/store/apps/details?id=com.me.filestar2&hl=en&gl=KR",
+        "collectedAt": "2026-11-27",
+        "locale": "en-KR",
+        "downloadsType": "lower-bound",
+        "ratingType": "aggregateRating"
+      }
     }
-  ]
+  ],
+  "scoringMode": "app"
 }

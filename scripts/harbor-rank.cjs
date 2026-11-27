@@ -9,6 +9,7 @@ function rank(data,date=data.updated){
   const part=has?{pop:(m.search||0)/max('search')*data.weights.pop,
    use:((m.downloads||0)/max('downloads')+((m.rating||0)/5))/2*data.weights.use,
    love:(m.ratingCount||0)/max('ratingCount')*data.weights.love}:null;
+  if(part)for(const k of Object.keys(part))part[k]=Math.min(data.weights[k],Math.round(part[k]*10)/10);
   let score=part?Object.values(part).reduce((a,b)=>a+b,0):null;
   return {...x,index,parts:part,score};
  });

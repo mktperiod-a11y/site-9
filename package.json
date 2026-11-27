@@ -4,7 +4,11 @@
     "build": "node scripts/harbor-build.cjs",
     "test": "node scripts/harbor-check.cjs",
     "check:screen": "node scripts/harbor-screen.cjs",
-    "restore": "node -e \"require('fs').copyFileSync('data/baseline.json','data/webhards.json')\""
+    "restore": "node -e \"require('fs').copyFileSync('data/baseline.json','data/webhards.json')\"",
+    "collect:apps": "node scripts/harbor-collect.cjs"
   },
-  "devDependencies": {"sharp": "^0.34.5", "playwright": "^1.56.1"}
+  "devDependencies": {
+    "sharp": "^0.34.5",
+    "playwright": "^1.56.1"
+  }
 }

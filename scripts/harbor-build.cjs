@@ -7,12 +7,21 @@ fs.cpSync('assets',out+'/assets',{recursive:true});
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const href=p=>base+'/'+p;
 const fmt=x=>x==null?'–':Number(x).toLocaleString('ko-KR');
+const rating=x=>x==null?'–':Number(x).toFixed(1);
+const downloads=x=>x==null?'–':fmt(x)+'+';
+const appMode=data.scoringMode==='app';
+const hasMetrics=rows.some(x=>x.score!=null);
+const basis=appMode?'앱 공개 지표 기준':'인기 · 사용성 · 애정';
+const metricNote=appMode?'다운로드·평점·평가 수를 반영합니다. 네이버 검색 관심도는 미반영입니다.':
+ hasMetrics?'공개 지표를 종합한 비교 지수입니다.':'공개 지표를 확보하면 지수를 표시합니다.';
+const source=x=>x.metricsSource?`<a class="hb-source" href="${esc(x.metricsSource.url)}"
+ target="_blank" rel="noopener noreferrer">Google Play ↗</a><span class="hb-date"> · ${esc(x.metricsSource.collectedAt)}</span>`:'–';
 const benefits=x=>x.benefits.length?x.benefits.map(b=>`<span class="hb-chip">${esc(b.text)}</span>`).join(' '):
  '<span class="hb-date">공식 사이트에서 확인하세요.</span>';
 const move=x=>{const old=data.previousRanks[x.id];return old==null?'NEW':old===x.rank?'–':
  `${old>x.rank?'▲':'▼'}${Math.abs(old-x.rank)}`;};
 const go=x=>`<a class="hb-button" href="${href('go/'+x.id+'/')}" target="_blank" rel="noopener noreferrer">사이트 바로가기 ↗</a>`;
-const faq=[['웹하드 순위는 어떻게 정하나요?','인기·사용성·애정 항목의 공개 지표를 종합합니다. 지표가 없으면 기존 순서를 유지합니다.'],
+const faq=[['웹하드 순위는 어떻게 정하나요?',appMode?'Google Play에서 확인한 다운로드·평점·평가 수로 계산합니다. 네이버 검색 관심도는 반영하지 않습니다.':'인기·사용성·애정 항목의 공개 지표를 종합합니다. 지표가 없으면 기존 순서를 유지합니다.'],
  ['별점은 앱 평점과 같은가요?','아닙니다. 카드 별점은 목록 순서를 표현한 편집 별점이며 구글 플레이 실측 평점과 다릅니다.'],
  ['가입 혜택은 누구나 받을 수 있나요?','가입 이력·본인인증·이용 기기 등 조건에 따라 달라질 수 있습니다. 공식 안내를 확인하세요.'],
  ['포인트로 모든 콘텐츠를 볼 수 있나요?','제휴 콘텐츠 제외 여부와 포인트 유효기간을 반드시 확인하세요.'],
@@ -69,17 +78,17 @@ const card=x=>`<article class="hb-card"><div class="hb-number">${x.rank}<span cl
 <p class="hb-reason">${esc(x.reason)}</p><div>${benefits(x)}</div></div>
 <div><div class="hb-date">★ ${x.stars.toFixed(1)} <small>편집 별점</small></div>${go(x)}</div></article>`;
 const comparison=`<section class="hb-panel"><h2>한눈에 비교하기</h2>
-<p class="hb-date">출처: 각 공식 사이트 · 확인 ${data.updated}<br>앱·검색 지표 미수집 · –는 미확인</p>
-<table class="hb-table"><caption class="hb-date">편집 별점과 실측 앱 평점을 구분해 확인하세요.</caption>
-<thead><tr>${['서비스','가입 혜택','앱 평점','평가 수','다운로드','지수'].map(x=>`<th scope="col">${x}</th>`).join('')}</tr></thead>
-<tbody>${rows.map(x=>`<tr><th scope="row"><a href="${href('webhard/'+x.id+'/')}">${x.name}</a></th>
-<td>${esc(x.benefits.find(b=>b.kind==='join')?.text||'–')}</td><td>${fmt(x.metrics.rating)}</td>
-<td>${fmt(x.metrics.ratingCount)}</td><td>${fmt(x.metrics.downloads)}</td><td>${x.score==null?'–':x.score.toFixed(1)}</td></tr>`).join('')}</tbody></table></section>`;
+<p class="hb-date">출처: Google Play · 수집 ${data.metricsDate||'미수집'}<br>다운로드는 공개 구간의 하한값입니다. –는 미확인입니다.</p>
+<table class="hb-table"><caption class="hb-date">앱 평점·평가 수는 한국 지역 영문 페이지 기준입니다. 지역·기기에 따라 다를 수 있습니다.</caption>
+<thead><tr>${['서비스','가입 혜택','앱 평점','평가 수','다운로드',appMode?'앱 지수':'지수'].map(x=>`<th scope="col">${x}</th>`).join('')}</tr></thead>
+<tbody>${rows.map(x=>`<tr><th scope="row"><a href="${href('webhard/'+x.id+'/')}">${x.name}</a><div>${source(x)}</div></th>
+<td>${esc(x.benefits.find(b=>b.kind==='join')?.text||'–')}</td><td>${rating(x.metrics.rating)}</td>
+<td>${fmt(x.metrics.ratingCount)}</td><td>${downloads(x.metrics.downloads)}</td><td>${x.score==null?'–':x.score.toFixed(1)}</td></tr>`).join('')}</tbody></table></section>`;
 fs.appendFileSync(out+'/assets/harbor.css','\n'+rows.filter(x=>x.score!=null).map(x=>`.hb-bar-${x.id}{width:${x.score}%}`).join('\n'));
-const chart=`<section class="hb-panel"><h2>종합 지수 비교</h2><p class="hb-date">인기 · 사용성 · 애정</p>
-${rows.map(x=>`<div class="hb-chartrow"><span>${x.name}</span><div class="hb-track">${x.score==null?'':
+const chart=`<section class="hb-panel"><h2>종합 지수 비교</h2><p class="hb-date">${basis} · 100점 기준</p>
+${rows.map(x=>`<div class="hb-chartrow"><span>${x.name}</span><div class="hb-track" role="img" aria-label="${x.name} 지수 ${x.score?.toFixed(1)||'미확인'}점">${x.score==null?'':
  `<div class="hb-fill hb-bar-${x.id}"></div>`}</div><span>${x.score==null?'–':x.score.toFixed(1)}</span></div>`).join('')}
-<p class="hb-date">공개 지표를 확보하면 지수를 표시합니다. 미수집 수치를 임의로 채우지 않습니다.</p></section>`;
+<p class="hb-date">${metricNote}</p></section>`;
 const shuffled=[...rows].sort((a,b)=>crypto.createHash('sha256').update(data.updated.slice(0,7)+a.id).digest('hex')
  .localeCompare(crypto.createHash('sha256').update(data.updated.slice(0,7)+b.id).digest('hex'))).slice(0,5);
 const title=`P2P사이트 순위 TOP 10 (${data.updated.slice(0,4)}년 ${Number(data.updated.slice(5,7))}월) | 최신 웹하드 추천·혜택 비교`;
@@ -92,7 +101,7 @@ ${shuffled.map(x=>`<a class="hb-sideitem" href="${href('webhard/'+x.id+'/')}">${
 ${esc(x.benefits[0]?.text||'공식 사이트에서 확인하세요.')}</small></a>`).join('')}
 </section><section class="hb-panel"><h3>처음 이용한다면</h3><p class="hb-sub">혜택보다 먼저 확인할<br>결제와 콘텐츠 이용 조건</p>
 <a class="hb-button" href="${href('criteria.html')}">이용 전 체크리스트 →</a></section>
-<p class="hb-note">현재 공개 지표는 미수집 상태입니다. 목록 순서는 기존 순서이며 실측 인기 순위를 뜻하지 않습니다.</p>
+<p class="hb-note">${metricNote} 다운로드는 공개 구간의 하한값을 사용합니다.</p>
 </aside></div>`,faq,[{'@context':'https://schema.org','@type':'ItemList',name:'웹하드 비교 목록',
  itemListElement:rows.map(x=>({'@type':'ListItem',position:x.rank,name:x.name,url:href('webhard/'+x.id+'/')}))}]);
 for(const x of rows){const q=[['가입 혜택은 무엇인가요?',x.benefits[0]?.text?`${x.benefits[0].text}. 적용 조건은 공식 사이트에서 확인하세요.`:
@@ -103,10 +112,12 @@ for(const x of rows){const q=[['가입 혜택은 무엇인가요?',x.benefits[0]
  `<div class="hb-narrow"><section class="hb-panel"><img class="hb-logo" src="${href(x.logo)}" alt="${x.name} 로고">
  <h2>가입 혜택과 이벤트</h2>${benefits(x)}<p class="hb-sub">${x.reason}</p>${go(x)}</section>
  <section class="hb-panel"><h2>지수 구성과 공개 지표</h2>
- <p class="hb-sub">인기 ${x.parts?.pop.toFixed(1)||'–'} / 사용성 ${x.parts?.use.toFixed(1)||'–'} / 애정 ${x.parts?.love.toFixed(1)||'–'}</p>
+ <p class="hb-date">${basis}</p>
+ <p class="hb-sub">${appMode?'검색 관심도 미반영':`인기 ${x.parts?.pop.toFixed(1)||'–'}`} /
+ 사용성 ${x.parts?.use.toFixed(1)||'–'} / 애정 ${x.parts?.love.toFixed(1)||'–'}</p>
  <p class="hb-sub">종합 지수 ${x.score?.toFixed(1)||'–'} · 이전 순위 ${data.previousRanks[x.id]||'–'} · 현재 ${x.rank}위</p>
- <p class="hb-sub">앱 평점 ${fmt(x.metrics.rating)} · 평가 수 ${fmt(x.metrics.ratingCount)} · 다운로드 ${fmt(x.metrics.downloads)}</p>
- <p class="hb-date">출처: 공식 사이트 · ${x.verifiedDate} 확인 / 앱·검색 지표 미수집</p></section>
+ <p class="hb-sub">앱 평점 ${rating(x.metrics.rating)} · 평가 수 ${fmt(x.metrics.ratingCount)} · 다운로드 ${downloads(x.metrics.downloads)}</p>
+ <p class="hb-date">공개 앱 지표 출처: ${source(x)}<br>다운로드는 공개 구간 하한값, 평점은 한국 지역 영문 페이지 기준입니다.</p></section>
  <section class="hb-panel"><h2>자주 묻는 질문</h2>${faqs(q)}</section>
  <section class="hb-panel"><h2>다른 웹하드도 비교해 보세요</h2><div class="hb-links">
  ${rows.filter(y=>y.id!==x.id).slice(0,5).map(y=>`<a href="${href('webhard/'+y.id+'/')}">${y.name}</a>`).join('')}</div></section></div>`,q);
@@ -126,8 +137,10 @@ page('picks.html','조건별 웹하드 추천 | '+brand,hero('내 조건에 맞�
  groups.filter(([,v])=>v.length>=2).map(([t,v])=>`<section class="hb-panel"><h2>${t}</h2>${v.map(card).join('')}</section>`).join(''));
 page('criteria.html','웹하드 순위 기준 | '+brand,hero('비교 기준을 확인하세요','숫자의 의미와 이용 전 확인할 조건을 안내합니다.')+
  `<section class="hb-panel hb-narrow"><h2>공개 지표로 비교합니다</h2><ul class="hb-list">
- <li>인기: 네이버 검색 관심도</li><li>사용성: 구글 플레이 다운로드와 평점</li><li>애정: 공개 평가 수 등 이용자 반응</li></ul>
- <p class="hb-sub">현재 앱·검색 지표는 미수집 상태입니다. 미수집 서비스는 기존 순서를 유지하며 지수를 표시하지 않습니다.
+ <li>사용성: 구글 플레이 다운로드와 평점</li><li>애정: 공개 평가 수</li>
+ <li>인기: 네이버 검색 관심도 ${appMode?'미반영':'반영 대상'}</li></ul>
+ <p class="hb-sub">${metricNote} 다운로드는 정확한 누적 횟수가 아닌 공개 구간 하한값입니다.
+ 평점과 평가 수는 한국 지역 영문 Google Play 페이지에서 수집합니다. 국가·기기별 화면과 차이가 있을 수 있습니다.
  카드의 편집 별점은 순서를 표현하며 실측 앱 평점이 아닙니다. 주간 조정과 순위 제한은 설정된 경우에만 적용됩니다.</p>
  <h2>이용 전 체크리스트</h2><ul class="hb-list"><li>원하는 콘텐츠의 제공 여부와 저작권 계약</li>
  <li>가입 혜택의 인증 조건·유효기간·사용 제외 항목</li><li>이용권 자동결제와 해지·환불 방법</li>

@@ -18,7 +18,11 @@ webhards.json: updated, metricsDate, rankLimit, minScore, weights,
 weeklyAdjust, maxRank, previousRanks, webhards 배열을 사용한다.
 서비스는 id, name, status, url, logo, color, reason, tags, benefits,
 metrics를 가진다. 모르는 지표는 null, 모르는 주소는 pending으로 둔다.
-현재 지표는 미수집이다. 기존 순서를 유지하고 실측 순위로 설명하지 않는다.
+앱 공개 지표는 실제 Google Play 페이지에서 수집한다. collect:apps 명령으로 갱신한다.
+현재 scoringMode는 app이며 검색 관심도는 미반영이다. 화면에서도 이를 명시한다.
+앱 지수는 다운로드·평점·평가 수로 계산하며 외부 공식 순위로 설명하지 않는다.
+다운로드는 구간 하한값이며 +를 붙인다. 평점은 소수점 한 자리로 표시한다.
+metricsSource는 원본 URL·수집일·지역·수치 유형을 담는다. 수집 실패 값은 직전 값을 유지한다.
 카드 별점은 편집 별점으로 앱 평점과 구분한다.
 
 차단 서비스 목록은 검사 스크립트를 따른다. 재등록 요청에는 기존 결정을 먼저 안내한다.
