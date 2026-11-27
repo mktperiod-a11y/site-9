@@ -6,6 +6,8 @@ const brand='혜택나침반';const out='_site';fs.rmSync(out,{recursive:true,fo
 fs.cpSync('assets',out+'/assets',{recursive:true});
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const href=p=>base+'/'+p;
+const logoHref=x=>href(x.logo)+'?v='+crypto.createHash('sha256')
+ .update(fs.readFileSync(x.logo)).digest('hex').slice(0,12);
 const styleVersion=crypto.createHash('sha256').update(fs.readFileSync('assets/harbor.css'))
  .update(JSON.stringify(data)).digest('hex').slice(0,12);
 const fmt=x=>x==null?'–':Number(x).toLocaleString('ko-KR');
@@ -74,7 +76,7 @@ ${scripts.map(s=>`<script type="application/ld+json">${s}</script>`).join('\n')}
 const hero=(t,sub)=>`<section class="hb-hero"><span class="hb-eyebrow">WEBHARD GUIDE</span><h1>${t}</h1>
 <p class="hb-sub">${sub}</p><span class="hb-update">업데이트 ${data.updated} <span>· ${rows.length}곳 비교</span></span></section>`;
 const card=x=>`<article class="hb-card"><div class="hb-number">${x.rank}<span class="hb-move">${move(x)}</span></div>
-<a href="${href('webhard/'+x.id+'/')}"><img class="hb-logo" src="${href(x.logo)}" alt="${esc(x.name)} 로고" width="96" height="42"></a>
+<a href="${href('webhard/'+x.id+'/')}"><img class="hb-logo" src="${logoHref(x)}" alt="${esc(x.name)} 로고" width="96" height="42"></a>
 <div><a class="hb-name" href="${href('webhard/'+x.id+'/')}">${esc(x.name)}</a>
 <p class="hb-reason">${esc(x.reason)}</p><div>${benefits(x)}</div></div>
 <div class="hb-card-action"><div class="hb-rating" aria-label="편집 별점 ${x.stars.toFixed(1)}점">
@@ -112,7 +114,7 @@ for(const x of rows){const q=[['가입 혜택은 무엇인가요?',x.benefits[0]
  ['카드 별점은 무엇인가요?','목록 순서를 표현한 편집 별점입니다. 앱 이용자 평점이 아닙니다.']];
  page(`webhard/${x.id}/index.html`,`${x.name} 혜택·이용 정보 | ${brand}`,
  hero(x.name+' 이용 정보',`${x.rank}번째 비교 서비스 · ${move(x)} · 편집 별점 ${x.stars.toFixed(1)}`)+
- `<div class="hb-narrow"><section class="hb-panel"><img class="hb-logo" src="${href(x.logo)}" alt="${x.name} 로고">
+ `<div class="hb-narrow"><section class="hb-panel"><img class="hb-logo" src="${logoHref(x)}" alt="${x.name} 로고">
  <h2>가입 혜택과 이벤트</h2>${benefits(x)}<p class="hb-sub">${x.reason}</p>${go(x)}</section>
  <section class="hb-panel"><h2>지수 구성과 공개 지표</h2>
  <p class="hb-date">${basis}</p>
